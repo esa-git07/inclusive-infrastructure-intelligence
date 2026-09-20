@@ -10,7 +10,9 @@ export type IssueType =
   | 'damaged_crossing'
   | 'uneven_surface'
   | 'blocked_pathway'
-  | 'pothole';
+  | 'pothole'
+  | 'missing_ramp'
+  | 'other';
 
 export type Severity = 'low' | 'medium' | 'high' | 'critical';
 
@@ -67,6 +69,7 @@ export interface VisionAnalysisResult {
   detectedObjects: string[];
   description: string;
   accessibilityBarrier: boolean;
+  aiSource?: 'gemini' | 'mock';
 }
 
 export interface BeforeAfterComparison {

@@ -15,6 +15,7 @@ import {
   Compass,
   FileCheck,
   ChevronRight,
+  Sparkles,
 } from 'lucide-react';
 import { speakText, stopSpeaking, isSpeaking } from '../lib/speechSynthesis';
 import { getDemoImageForIssue } from '../data/mockImages';
@@ -158,11 +159,23 @@ export const AIAnalysisResultView: React.FC = () => {
         <div className="lg:col-span-5 space-y-6">
           {/* Photo Box */}
           <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Photo Ingestion
-              </span>
-              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Photo Ingestion
+                </span>
+                {analysis.aiSource === 'gemini' ? (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded-full shadow-xs">
+                    <Sparkles className="w-3 h-3 text-sky-600" />
+                    Analyzed with Gemini Vision
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center text-[10px] font-medium text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full">
+                    Analyzed with Demo AI
+                  </span>
+                )}
+              </div>
+              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
                 Confidence: {Math.round(analysis.confidence * 100)}%
               </span>
             </div>

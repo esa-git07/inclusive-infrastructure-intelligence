@@ -147,6 +147,34 @@ const IMPACT_REGISTRY: Record<IssueType, ImpactDefinition> = {
       explanation: 'Direct ankle-twist and stumbling hazard, especially under poor lighting conditions.',
     },
   },
+  missing_ramp: {
+    wheelchair: {
+      level: 'critical',
+      explanation: 'Absence of curb ramps prevents wheelchair entry, stranding users on roadways or blocking building access entirely.',
+    },
+    visual: {
+      level: 'medium',
+      explanation: 'Unramped curb drop-offs without tactile warning surfaces create step-down stumbling hazards.',
+    },
+    elderly: {
+      level: 'high',
+      explanation: 'High step curbs without ramp transitions strain joints and increase the risk of serious falls.',
+    },
+  },
+  other: {
+    wheelchair: {
+      level: 'high',
+      explanation: 'Identified infrastructure impediment restricts smooth wheel transit or safe accessible routing.',
+    },
+    visual: {
+      level: 'medium',
+      explanation: 'Unexpected obstacle or surface defect compromises tactile orientation and walkway navigation.',
+    },
+    elderly: {
+      level: 'high',
+      explanation: 'Pedestrian right-of-way hazard requiring sudden avoidance maneuvers, increasing fall likelihood.',
+    },
+  },
 };
 
 /**

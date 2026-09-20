@@ -80,41 +80,72 @@ export const ReportIssueView: React.FC = () => {
 
     // Realistic progressive loading sequence as specified in PRD
     setAnalysisStep('1/4: Ingesting image and preprocessing resolution...');
-    await new Promise((r) => setTimeout(r, 450));
+    await new Promise((r) => setTimeout(r, 350));
 
-    setAnalysisStep('2/4: Vision AI identifying barrier objects & conditions...');
-    await new Promise((r) => setTimeout(r, 550));
+    setAnalysisStep('2/4: Gemini Vision AI analyzing barrier objects & conditions...');
 
-    setAnalysisStep('3/4: Accessibility Engine evaluating profile impacts...');
-    await new Promise((r) => setTimeout(r, 450));
-
-    setAnalysisStep('4/4: Calculating deterministic priority score (0–100)...');
-    await new Promise((r) => setTimeout(r, 400));
-
-    // Determine issue characteristics
-    const issue = selectedIssueType;
-    const severity: Severity = issue === 'open_drain' ? 'critical' : 'high';
-    const confidence = issue === 'blocked_ramp' ? 0.93 : 0.94;
-    const detectedObjects =
+    // Fallback baseline values
+    let issue: IssueType = selectedIssueType;
+    let severity: Severity = issue === 'open_drain' ? 'critical' : 'high';
+    let confidence = issue === 'blocked_ramp' ? 0.93 : 0.94;
+    let detectedObjects =
       issue === 'blocked_ramp'
         ? ['garbage', 'ramp', 'uneven surface']
         : issue === 'open_drain'
         ? ['open drain pit', 'missing slab', 'curb edge']
         : ['broken concrete', 'uneven slab', 'buckled curb'];
 
-    const barrierDescription =
+    let barrierDescription =
       issue === 'blocked_ramp'
         ? 'A designated wheelchair access ramp is physically obstructed by accumulated municipal waste and debris.'
-        : description;
+        : description || 'Civic infrastructure obstruction observed.';
+    let accessibilityBarrier = true;
+    let aiSource: 'gemini' | 'mock' = 'mock';
+
+    // Call real Gemini Vision backend API
+    try {
+      const apiRes = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photoData: photoPreview }),
+      });
+
+      if (apiRes.ok) {
+        const data = await apiRes.json();
+        if (data.success && data.analysis) {
+          issue = data.analysis.issue;
+          severity = data.analysis.severity;
+          confidence = data.analysis.confidence;
+          detectedObjects = data.analysis.detected_objects;
+          barrierDescription = data.analysis.description;
+          accessibilityBarrier = data.analysis.accessibility_barrier;
+          aiSource = 'gemini';
+        }
+      }
+    } catch (err) {
+      console.warn('Gemini vision API unavailable; gracefully falling back to demo analysis:', err);
+    }
+
+    setAnalysisStep('3/4: Accessibility Engine evaluating profile impacts...');
+    await new Promise((r) => setTimeout(r, 450));
 
     // Run deterministic engines
     const accessibilityImpacts = calculateAccessibilityImpacts(issue, severity);
+
+    setAnalysisStep('4/4: Calculating deterministic priority score (0–100)...');
+    await new Promise((r) => setTimeout(r, 400));
+
+    const issueTitle =
+      issue === 'blocked_ramp'
+        ? 'Blocked Ramp'
+        : issue.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
     const priority = calculatePriorityScore({
       severity,
       accessibilityImpacts,
       locationImportance: 'high',
       environmentalRisk: 'high',
-      issueTitle: 'Blocked Ramp at Civic Entrance',
+      issueTitle: issue === 'blocked_ramp' ? 'Blocked Ramp at Civic Entrance' : `${issueTitle} at ${locationName.split(',')[0]}`,
       locationName,
     });
     const recommendation = getControlledRecommendation(issue);
@@ -123,44 +154,43 @@ export const ReportIssueView: React.FC = () => {
     const reportId = `rep-hyd-${Date.now().toString().slice(-4)}`;
     const trackingNumber = `III-2026-${Math.floor(1000 + Math.random() * 9000)}`;
 
-const getCoordinatesForLocation = (location: string): [number, number] => {
-  const locLower = location.toLowerCase();
-  let baseCoords: [number, number] = [17.4120, 78.4680];
+    const getCoordinatesForLocation = (location: string): [number, number] => {
+      const locLower = location.toLowerCase();
+      let baseCoords: [number, number] = [17.4120, 78.4680];
 
-  if (locLower.includes('secretariat') || locLower.includes('brkr')) {
-    baseCoords = [17.4082, 78.4745]; // Distinct from rep-hyd-001's [17.4055, 78.4716]
-  } else if (locLower.includes('koti') || locLower.includes('osmania')) {
-    baseCoords = [17.3820, 78.4867];
-  } else if (locLower.includes('ameerpet')) {
-    baseCoords = [17.4375, 78.4482];
-  } else if (locLower.includes('secunderabad')) {
-    baseCoords = [17.4344, 78.5015];
-  } else if (locLower.includes('dilsukhnagar')) {
-    baseCoords = [17.3688, 78.5247];
-  } else if (locLower.includes('hitec') || locLower.includes('cyber')) {
-    baseCoords = [17.4435, 78.3772];
-  } else if (locLower.includes('charminar')) {
-    baseCoords = [17.3616, 78.4747];
-  } else if (locLower.includes('banjara')) {
-    baseCoords = [17.4156, 78.4350];
-  } else if (locLower.includes('jubilee')) {
-    baseCoords = [17.4319, 78.4073];
-  }
+      if (locLower.includes('secretariat') || locLower.includes('brkr')) {
+        baseCoords = [17.4082, 78.4745];
+      } else if (locLower.includes('koti') || locLower.includes('osmania')) {
+        baseCoords = [17.3820, 78.4867];
+      } else if (locLower.includes('ameerpet')) {
+        baseCoords = [17.4375, 78.4482];
+      } else if (locLower.includes('secunderabad')) {
+        baseCoords = [17.4344, 78.5015];
+      } else if (locLower.includes('dilsukhnagar')) {
+        baseCoords = [17.3688, 78.5247];
+      } else if (locLower.includes('hitec') || locLower.includes('cyber')) {
+        baseCoords = [17.4435, 78.3772];
+      } else if (locLower.includes('charminar')) {
+        baseCoords = [17.3616, 78.4747];
+      } else if (locLower.includes('banjara')) {
+        baseCoords = [17.4156, 78.4350];
+      } else if (locLower.includes('jubilee')) {
+        baseCoords = [17.4319, 78.4073];
+      }
 
-  // Jitter slightly so distinct submissions at the same landmark create distinct visible pins
-  const jitterLat = (Math.random() * 0.003 + 0.001) * (Math.random() > 0.5 ? 1 : -1);
-  const jitterLng = (Math.random() * 0.003 + 0.001) * (Math.random() > 0.5 ? 1 : -1);
+      const jitterLat = (Math.random() * 0.003 + 0.001) * (Math.random() > 0.5 ? 1 : -1);
+      const jitterLng = (Math.random() * 0.003 + 0.001) * (Math.random() > 0.5 ? 1 : -1);
 
-  return [
-    Number((baseCoords[0] + jitterLat).toFixed(5)),
-    Number((baseCoords[1] + jitterLng).toFixed(5)),
-  ];
-};
+      return [
+        Number((baseCoords[0] + jitterLat).toFixed(5)),
+        Number((baseCoords[1] + jitterLng).toFixed(5)),
+      ];
+    };
 
     const newReport: InfrastructureReport = {
       id: reportId,
       trackingNumber,
-      title: issue === 'blocked_ramp' ? 'Blocked Ramp at Civic Entrance' : `Reported ${issue.replace('_', ' ')}`,
+      title: issue === 'blocked_ramp' ? 'Blocked Ramp at Civic Entrance' : `${issueTitle} at ${locationName.split(',')[0]}`,
       locationName,
       coordinates: getCoordinatesForLocation(locationName),
       locationImportance: 'high',
@@ -172,12 +202,13 @@ const getCoordinatesForLocation = (location: string): [number, number] => {
 
       analysis: {
         issue,
-        issueTitle: issue === 'blocked_ramp' ? 'Blocked Ramp' : issue.replace('_', ' '),
+        issueTitle,
         severity,
         confidence,
         detectedObjects,
         description: barrierDescription,
-        accessibilityBarrier: true,
+        accessibilityBarrier,
+        aiSource,
       },
 
       accessibilityImpacts,
@@ -190,7 +221,9 @@ const getCoordinatesForLocation = (location: string): [number, number] => {
         {
           status: 'reported',
           timestamp: new Date().toISOString(),
-          note: `Submitted by citizen using ${selectedProfile.toUpperCase()} accessibility profile.`,
+          note: `Submitted by citizen using ${selectedProfile.toUpperCase()} accessibility profile${
+            aiSource === 'gemini' ? ' (Analyzed by Gemini Vision)' : ''
+          }.`,
         },
       ],
     };

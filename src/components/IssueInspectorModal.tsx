@@ -144,6 +144,18 @@ export const IssueInspectorModal: React.FC<IssueInspectorProps> = ({ reportId, o
                     <span className="text-slate-500">Vision Confidence:</span>
                     <span className="font-bold text-emerald-700">{Math.round(analysis.confidence * 100)}%</span>
                   </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">AI Source:</span>
+                    {analysis.aiSource === 'gemini' ? (
+                      <span className="font-bold text-sky-700 bg-sky-50 border border-sky-200 px-1.5 py-0.5 rounded text-[10px]">
+                        ✨ Gemini Vision
+                      </span>
+                    ) : (
+                      <span className="font-medium text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded text-[10px]">
+                        Demo AI
+                      </span>
+                    )}
+                  </div>
                   <div className="flex justify-between">
                     <span className="text-slate-500">Department:</span>
                     <span className="font-bold text-slate-800">{recommendation.department}</span>

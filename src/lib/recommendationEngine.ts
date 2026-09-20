@@ -61,6 +61,18 @@ const RECOMMENDATION_REGISTRY: Record<IssueType, RecommendationInfo> = {
     category: 'Carriageway / Crossing Patching',
     rationale: 'Immediate patch eliminates wheel drop hazards for wheelchair users and severe trip risks for elderly walkers.',
   },
+  missing_ramp: {
+    action: 'Construct standard 1:12 slope accessible curb ramp with tactile pavers.',
+    department: 'Roads & Public Works',
+    category: 'Universal Accessibility Construction',
+    rationale: 'Adding a compliant curb ramp eliminates a complete physical barrier for wheelchair and mobility aid users.',
+  },
+  other: {
+    action: 'Inspect site barrier and execute required accessibility remediation.',
+    department: 'Municipal / Engineering',
+    category: 'Civic Infrastructure Remediation',
+    rationale: 'Remediating the detected defect restores barrier-free pedestrian transit along the public right-of-way.',
+  },
 };
 
 /**
