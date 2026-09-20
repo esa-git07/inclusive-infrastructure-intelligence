@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <defs>
+    <linearGradient id="skyGrad2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bae6fd"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="wallGrad2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#64748b"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
+    <linearGradient id="cleanConcreteGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+  </defs>
+  <!-- Background building & clear sky -->
+  <rect width="600" height="400" fill="url(#skyGrad2)"/>
+  <rect y="80" width="600" height="200" fill="url(#wallGrad2)"/>
+  <rect x="80" y="110" width="100" height="120" fill="#38bdf8" opacity="0.8" rx="4"/>
+  <rect x="220" y="110" width="100" height="120" fill="#38bdf8" opacity="0.8" rx="4"/>
+  <rect x="360" y="110" width="100" height="120" fill="#38bdf8" opacity="0.8" rx="4"/>
+
+  <!-- Ground / Clean Pavement -->
+  <polygon points="0,280 600,280 600,400 0,400" fill="#334155"/>
+
+  <!-- Clean Pristine Ramp with bright safety yellow curb -->
+  <polygon points="120,280 480,280 540,380 60,380" fill="url(#cleanConcreteGrad)"/>
+  <line x1="60" y1="380" x2="120" y2="280" stroke="#eab308" stroke-width="10"/>
+  <line x1="540" y1="380" x2="480" y2="280" stroke="#eab308" stroke-width="10"/>
+
+  <!-- Prominent Blue Universal Accessibility Symbol painted on ramp -->
+  <circle cx="300" cy="325" r="24" fill="#0284c7"/>
+  <circle cx="300" cy="316" r="4.5" fill="#ffffff"/>
+  <path d="M296,323 L302,323 L304,330 L309,330 M298,328 A 6 6 0 1 0 304 334" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Clean Polished Handrails -->
+  <line x1="110" y1="230" x2="50" y2="330" stroke="#0284c7" stroke-width="6"/>
+  <line x1="110" y1="280" x2="110" y2="230" stroke="#0284c7" stroke-width="5"/>
+  <line x1="80" y1="330" x2="80" y2="280" stroke="#0284c7" stroke-width="5"/>
+  <line x1="50" y1="380" x2="50" y2="330" stroke="#0284c7" stroke-width="5"/>
+
+  <!-- Status badges -->
+  <rect x="20" y="20" width="220" height="34" rx="6" fill="#000000" opacity="0.75"/>
+  <text x="32" y="42" fill="#22c55e" font-family="system-ui, sans-serif" font-size="13" font-weight="bold">[OK] REMEDIATED &amp; CLEAR</text>
+  <rect x="360" y="20" width="220" height="34" rx="6" fill="#000000" opacity="0.75"/>
+  <text x="372" y="42" fill="#ffffff" font-family="system-ui, sans-serif" font-size="12">POST-FIX VERIFICATION</text>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <defs>
+    <linearGradient id="swSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#swSky)"/>
+  <polygon points="100,50 500,50 580,400 20,400" fill="#64748b"/>
+
+  <!-- Broken slabs, jagged cracks, uneven elevation -->
+  <path d="M150,220 L280,260 L340,210 L460,280" stroke="#1e293b" stroke-width="8" fill="none"/>
+  <path d="M280,260 L290,360 L240,380" stroke="#0f172a" stroke-width="7" fill="none"/>
+  <polygon points="280,260 340,210 360,250 310,290" fill="#475569" stroke="#0f172a" stroke-width="3"/>
+  <polygon points="170,230 260,255 240,290 150,260" fill="#334155" stroke="#0f172a" stroke-width="2"/>
+
+  <!-- Hazard markers -->
+  <line x1="280" y1="260" x2="340" y2="210" stroke="#f97316" stroke-width="4" stroke-dasharray="6,4"/>
+  <circle cx="280" cy="260" r="8" fill="#ef4444"/>
+  <circle cx="340" cy="210" r="8" fill="#ef4444"/>
+
+  <!-- Status badges -->
+  <rect x="20" y="20" width="240" height="34" rx="6" fill="#000000" opacity="0.75"/>
+  <text x="32" y="42" fill="#f97316" font-family="system-ui, sans-serif" font-size="13" font-weight="bold">[!] BUCKLED SIDEWALK SLABS</text>
+  <rect x="360" y="20" width="220" height="34" rx="6" fill="#000000" opacity="0.75"/>
+  <text x="372" y="42" fill="#ffffff" font-family="system-ui, sans-serif" font-size="12">AMEERPET METRO P-1042</text>
+</svg>
